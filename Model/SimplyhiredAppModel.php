@@ -1,7 +1,2 @@
 <?php
-
-class SimplyhiredAppModel extends AppModel {
-
-}
-
-?>
+class SimplyhiredAppModel extends AppModel {}

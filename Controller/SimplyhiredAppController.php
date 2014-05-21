@@ -1,7 +1,2 @@
 <?php
-
-class SimplyhiredAppController extends AppController {
-
-}
-
-?>
+class SimplyhiredAppController extends AppController {}
