@@ -595,7 +595,7 @@ class SimplyhiredSource extends DataSource {
 			$this->error = $error;
 		$type = ($type) ? ' with '.$type : '';
 		
-		if (Configure::read() > 0) {
+		if (Configure::read('debug') > 0) {
 			trigger_error('<span style = "color:Red;text-align:left"><b>'.$this->description.' ERROR'.$type.':</b> ' . $error . '</span>', E_USER_WARNING);
 		}
 	}
