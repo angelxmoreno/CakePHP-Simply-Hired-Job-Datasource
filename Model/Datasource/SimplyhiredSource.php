@@ -194,7 +194,7 @@ class SimplyhiredSource extends DataSource {
         $results = $response->toArray();
         $resultSet = $results['jobs_collection'];
         if ($Model->findQueryType === 'count' && count($resultSet) > 0) {
-            $resultSet = array(array(array('count' => $results['total_results'])));
+            $resultSet = array(array(array('count' => $results['total_viewable_results'])));
         } elseif ($Model->findQueryType === 'count' && count($resultSet) == 0) {
             $resultSet = array(array(array('count' => 0)));
         } else {
