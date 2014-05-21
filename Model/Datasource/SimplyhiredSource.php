@@ -160,7 +160,7 @@ class SimplyhiredSource extends DataSource {
      */
     public function connect() {
         if (empty($this->config['pshid']) || empty($this->config['jbd'])) {
-            throw CakeException('Please provide your PublisherID and JobAMaticDomain in the config');
+            throw new CakeException('Please provide your PublisherID and JobAMaticDomain in the config');
         }
         $this->CakeHttp = new CakeHttp();
         $this->SimplyhiredApi = new SimplyHiredJobAMaticApi(
@@ -225,7 +225,7 @@ class SimplyhiredSource extends DataSource {
 
         $cleanQuery['conditions'] = $this->__cleanQueryConditions($cleanQuery['conditions']);
         $cleanQuery['fields'] = $this->__cleanQueryFields($cleanQuery['fields']);
-        if($Model->findQueryType != 'count'){
+        if ($Model->findQueryType != 'count') {
             $cleanQuery['order'] = $this->__cleanQueryOrder($cleanQuery['order']);
         }
         $cleanQuery['limit'] = $this->__cleanQueryLimit($cleanQuery['limit']);
@@ -251,7 +251,7 @@ class SimplyhiredSource extends DataSource {
         if (array_key_exists('miles', $dirtyConditions)) {
             $cleanConditions['miles'] = $dirtyConditions['miles'];
             if (is_string($cleanConditions['miles']) && $cleanConditions['miles'] != 'exact') {
-                throw CakeException('Invalid value for miles: ' . $cleanConditions['miles']);
+                throw new CakeException('Invalid value for miles: ' . $cleanConditions['miles']);
             } elseif ($cleanConditions['miles'] != 'exact' && (int) $cleanConditions['miles'] > 100) {
                 $cleanConditions['miles'] = 100;
             } elseif ($cleanConditions['miles'] != 'exact' && (int) $cleanConditions['miles'] < 1) {
@@ -310,6 +310,9 @@ class SimplyhiredSource extends DataSource {
      * @access protected
      */
     protected function __cleanQueryOrder($dirtyOrder) {
+        if (array_key_exists(0, $dirtyOrder) && is_null($dirtyOrder[0])) {
+            return null;
+        }
         if (!is_array($dirtyOrder)) {
             list($field, $dir) = explode(' ', $dirtyOrder);
         } else {
@@ -322,11 +325,11 @@ class SimplyhiredSource extends DataSource {
         $dir = strtolower($dir);
 
         if (!in_array($field, $this->_validOrderKeys)) {
-            throw CakeException('Invalid order key: ' . $field);
+            throw new CakeException('Invalid order key: ' . $field);
         }
 
         if (!in_array($dir, array('asc', 'desc'))) {
-            throw CakeException('Invalid order direction: ' . $dir);
+            throw new CakeException('Invalid order direction: ' . $dir);
         }
         $order = $field . ' ' . $dir;
         return array_search($order, $this->_mapOrder);
