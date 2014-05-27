@@ -246,6 +246,14 @@ class SimplyhiredSource extends DataSource {
         if (array_key_exists('location', $dirtyConditions)) {
             $cleanConditions['location'] = $dirtyConditions['location'];
         }
+        
+        //check client_ip
+        if (array_key_exists('client_ip', $dirtyConditions)) {
+            if(!Validation::ip($dirtyConditions['client_ip'])){
+                throw new CakeException($dirtyConditions['client_ip'].' is not a valid IP');
+            }
+            $cleanConditions['client_ip'] = $dirtyConditions['client_ip'];
+        }
 
         //check miles
         if (array_key_exists('miles', $dirtyConditions)) {
@@ -383,6 +391,10 @@ class SimplyhiredSource extends DataSource {
 
         if (isset($queryData['conditions']['location'])) {
             $this->SimplyhiredApi->setLocation($queryData['conditions']['location']);
+        }
+        
+        if (isset($queryData['conditions']['client_ip'])) {
+            $this->SimplyhiredApi->setClientIp($queryData['conditions']['client_ip']);
         }
 
         if (isset($queryData['conditions']['miles']) && $queryData['conditions']['miles'] == 'exact') {
