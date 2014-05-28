@@ -190,9 +190,15 @@ class SimplyhiredSource extends DataSource {
 
         $queryData = $this->__scrubQueryData($queryData, $Model);
         $this->__buildRequest($queryData);
-        $response = $this->SimplyhiredApi->request();
-        $results = $response->toArray();
-        $resultSet = $results['jobs_collection'];
+        try {
+            $response = $this->SimplyhiredApi->request();
+            $results = $response->toArray();
+            $resultSet = $results['jobs_collection'];
+        } catch (Exception $e) {
+            $resultSet = array();
+        }
+
+        
         if ($Model->findQueryType === 'count' && count($resultSet) > 0) {
             $resultSet = array(array(array('count' => $results['total_viewable_results'])));
         } elseif ($Model->findQueryType === 'count' && count($resultSet) == 0) {
@@ -446,22 +452,6 @@ class SimplyhiredSource extends DataSource {
      */
     public function calculate(&$Model, $func = 'count', $params = array()) {
         return 'count';
-    }
-
-}
-
-if (!function_exists('getRealIpAddr')) {
-
-    function getRealIpAddr() {
-        if (isset($_SERVER))
-            $ip = '0.0.0.0';
-        elseif (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        else
-            $ip = $_SERVER['REMOTE_ADDR'];
-        return $ip;
     }
 
 }
