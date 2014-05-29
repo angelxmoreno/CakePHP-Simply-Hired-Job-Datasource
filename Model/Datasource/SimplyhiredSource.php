@@ -177,7 +177,7 @@ class SimplyhiredSource extends DataSource {
      * @return mixed
      * @access public
      */
-    public function read(Model $Model, $queryData = array()) {
+    public function read(Model $Model, $queryData = array(), $recursive = null) {
         /*
           $cacheKey = 'SimplyHiredCall_' . md5(serialize($queryData));
           if ($this->config['cached']) {
